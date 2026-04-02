@@ -1,66 +1,46 @@
-import 'package:flutter/material.dart';
+import "package:easy_localization/easy_localization.dart";
+import "package:firebase_core/firebase_core.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:hive_flutter/hive_flutter.dart";
+import "package:hydrated_bloc/hydrated_bloc.dart";
+import "package:path_provider/path_provider.dart";
 
-void main() {
-  runApp(const MyApp());
-}
+import "core/configs/adapter/adapter_conf.dart";
+import "core/constants/list_translation_locale.dart";
+import "core/utils/observer.dart";
+import "features/flutter_core_app.dart";
+import "firebase_options.dart";
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+//Test
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
+  await Future.wait([
+    Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
+    Hive.initFlutter(),
+    getTemporaryDirectory().then((dir) async {
+      HydratedBloc.storage = await HydratedStorage.build(
+        storageDirectory: kIsWeb
+            ? HydratedStorageDirectory.web
+            : HydratedStorageDirectory(dir.path),
+      );
+    }),
+  ]);
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  configureAdapter();
 
-  final String title;
+  // configureDepedencies();
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  Bloc.observer = AppBlocObserver();
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [vietnameseLocale, englishLocale],
+      path: "assets/translations",
+      startLocale: vietnameseLocale,
+      child: const FlutterCoreApp(),
+    ),
+  );
 }
