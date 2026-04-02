@@ -26,7 +26,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> logout() async {
-    // TODO: implement logout
     // Need to implement logout because implements medthod AuthRemoteDataSource
     throw UnimplementedError();
   }
