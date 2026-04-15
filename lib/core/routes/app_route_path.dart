@@ -2,7 +2,7 @@ enum AppRoute {
   auth(path: "/auth"),
   login(path: "login"),
   register(path: "register"),
-  home(path: "/home/:user_id/:email/:username"),
+  home(path: "/home"),
   createProduct(path: "/product/add"),
   updateProduct(path: "/product/update/:product_id/:product_name/:product_price");
 

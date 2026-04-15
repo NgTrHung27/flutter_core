@@ -1,7 +1,6 @@
+import '../../../../core/api/api_helper.dart';
 import '../../../../core/api/api_url.dart';
-import '../../../../core/constants/error_message.dart';
-import '../../../../core/errors/exceptions.dart';
-import '../../../../core/utils/logger.dart';
+
 import '../models/login_model.dart';
 import '../models/user_model.dart';
 
@@ -10,39 +9,34 @@ sealed class AuthRemoteDataSource {
   Future<void> logout();
 }
 
-// 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+  final ApiHelper _apiHelper;
+
+  const AuthRemoteDataSourceImpl(this._apiHelper);
+
   @override
   Future<UserModel> login(LoginModel model) async {
     try {
-      final user = await _getUserByEmail(model.email ?? "");
-      return user;
-    } on EmptyException {
-      throw AuthException();
-    } catch (e) {
-      throw ServerException();
+      final response = await _apiHelper.execute(
+        method: Method.post,
+        url: ApiUrl.login,
+        data: {
+          "email": model.email,
+          "password": model.password,
+        },
+      );
+
+      // response here is the whole Map: {"statusCode": 201, "message": "...", "data": {...}}
+      final data = response['data'] as Map<String, dynamic>;
+      return UserModel.fromJson(data);
+    } on Exception {
+      rethrow;
     }
   }
 
   @override
   Future<void> logout() async {
-    // Need to implement logout because implements medthod AuthRemoteDataSource
+    // Need to implement logout if needed
     throw UnimplementedError();
-  }
-
-  Future<UserModel> _getUserByEmail(String email) async {
-    try {
-      final result = await ApiUrl.users.where("email", isEqualTo: email).get();
-      final doc = result.docs.first;
-      final user = UserModel.fromJson(doc.data(), doc.id);
-
-      return user;
-    } catch (e) {
-      if (e.toString() == noElement) {
-        throw EmptyException();
-      }
-      logger.e(e);
-      throw ServerException();
-    }
   }
 }

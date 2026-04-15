@@ -5,17 +5,19 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import '../../api/api_helper.dart';
 import '../../api/api_interceptor.dart';
+import '../../api/api_url.dart';
 import '../../blocs/theme/theme_bloc.dart';
 import '../../blocs/translate/translate_bloc.dart';
 import '../../cache/hive_local_storage.dart';
 import '../../cache/secure_local_storage.dart';
 import '../../network/network_checker.dart';
+import '../../../features/auth/di/auth_depedency.dart';
 import 'injector.dart';
 
 final getIt = GetIt.I;
 
 void configureDepedencies() {
-  // AuthDepedency.init();
+  AuthDepedency.init();
   // ProductDependency.init();
 
   getIt.registerLazySingleton(() => ThemeBloc());
@@ -27,7 +29,9 @@ void configureDepedencies() {
   getIt.registerLazySingleton(() => ApiHelper(getIt<Dio>()));
 
   getIt.registerLazySingleton(
-    () => Dio()..interceptors.add(getIt<ApiInterceptor>()),
+    () =>
+        Dio(BaseOptions(baseUrl: ApiUrl.baseUrl))
+          ..interceptors.add(getIt<ApiInterceptor>()),
   );
 
   getIt.registerLazySingleton(() => ApiInterceptor());

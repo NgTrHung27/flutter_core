@@ -7,7 +7,9 @@ import '../core/blocs/theme/theme_bloc.dart';
 import '../core/blocs/translate/translate_bloc.dart';
 import '../core/configs/injector/injector_conf.dart';
 import '../core/routes/app_route_conf.dart';
+import '../core/routes/app_route_path.dart';
 import '../core/themes/app_theme.dart';
+import 'auth/presentation/bloc/auth/auth_bloc.dart';
 
 class FlutterCoreApp extends StatelessWidget {
   const FlutterCoreApp({super.key});
@@ -26,30 +28,25 @@ class FlutterCoreApp extends StatelessWidget {
           providers: [
             BlocProvider(create: (_) => getIt<ThemeBloc>()),
             BlocProvider(create: (_) => getIt<TranslateBloc>()),
-            // BlocProvider(
-            //   create: (_) =>
-            //       getIt<AuthBloc>()..add(AuthCheckSignInStatusEvent()),
-            // ),
+            BlocProvider(
+              create: (_) =>
+                  getIt<AuthBloc>()..add(AuthCheckSignInStatusEvent()),
+            ),
           ],
-          // child: BlocListener<AuthBloc, AuthState>(
-          //   listenWhen: (_, current) =>
-          //       current is AuthCheckSignInStatusSuccessState,
-          //   listener: (_, state) {
-          //     if (state is AuthCheckSignInStatusSuccessState) {
-          //       final user = state.data;
-          //       final userMap = {
-          //         "user_id": user.userId ?? "",
-          //         "email": user.email ?? "",
-          //         "username": user.username ?? "",
-          //       };
+          child: BlocListener<AuthBloc, AuthState>(
+            listenWhen: (_, current) =>
+                current is AuthCheckSignInStatusSuccessState,
+            listener: (_, state) {
+              if (state is AuthCheckSignInStatusSuccessState) {
+                final user = state.data;
 
-          //       router.goNamed(
-          //         AppRoute.home.name,
-          //         pathParameters: userMap,
-          //       );
-          //     }
-          //   },
-          child: BlocBuilder<ThemeBloc, ThemeState>(
+                router.goNamed(
+                  AppRoute.home.name,
+                  extra: user,
+                );
+              }
+            },
+            child: BlocBuilder<ThemeBloc, ThemeState>(
             builder: (_, state) {
               return MaterialApp.router(
                 debugShowCheckedModeBanner: false,
@@ -60,6 +57,7 @@ class FlutterCoreApp extends StatelessWidget {
                 routerConfig: router,
               );
             },
+            ),
           ),
         ),
       ),

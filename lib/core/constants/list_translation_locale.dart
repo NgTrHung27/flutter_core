@@ -1,4 +1,4 @@
 import 'package:flutter/widgets.dart';
 
-const englishLocale = Locale('en', 'US');
-const vietnameseLocale = Locale('vi', 'VN');
+const englishLocale = Locale('en');
+const vietnameseLocale = Locale('vi');

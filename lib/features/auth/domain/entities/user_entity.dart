@@ -5,11 +5,21 @@ class UserEntity extends Equatable {
   final String? username;
   final String? email;
   final String? password;
+  final String? token;
+  final String? refreshToken;
 
-  const UserEntity({this.userId, this.username, this.email, this.password});
+  const UserEntity({
+    this.userId,
+    this.username,
+    this.email,
+    this.password,
+    this.token,
+    this.refreshToken,
+  });
 
   @override
-  List<Object?> get props => [userId, username, email, password];
+  List<Object?> get props =>
+      [userId, username, email, password, token, refreshToken];
 }
 /* Câu hỏi	Trả lời
 - Entity là gì?	

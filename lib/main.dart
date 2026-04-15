@@ -2,6 +2,7 @@ import "package:easy_localization/easy_localization.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:flutter/rendering.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "package:hydrated_bloc/hydrated_bloc.dart";
 import "package:path_provider/path_provider.dart";
@@ -9,6 +10,7 @@ import "package:path_provider/path_provider.dart";
 import "core/configs/adapter/adapter_conf.dart";
 import "core/constants/list_translation_locale.dart";
 import "core/utils/observer.dart";
+import "core/configs/injector/injector_conf.dart";
 import "features/flutter_core_app.dart";
 import "firebase_options.dart";
 
@@ -31,10 +33,10 @@ void main() async {
 
   configureAdapter();
 
-  // configureDepedencies();
+  configureDepedencies();
 
   Bloc.observer = AppBlocObserver();
-
+  debugRepaintRainbowEnabled = true;
   runApp(
     EasyLocalization(
       supportedLocales: const [vietnameseLocale, englishLocale],

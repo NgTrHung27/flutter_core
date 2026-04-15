@@ -20,16 +20,16 @@ class ApiHelper {
           response = await _dio.get(url);
           break;
         case Method.post:
-          response = await _dio.post(url);
+          response = await _dio.post(url, data: data);
           break;
         case Method.put:
-          response = await _dio.put(url);
+          response = await _dio.put(url, data: data);
           break;
         case Method.patch:
-          response = await _dio.patch(url);
+          response = await _dio.patch(url, data: data);
           break;
         case Method.delete:
-          response = await _dio.delete(url);
+          response = await _dio.delete(url, data: data);
           break;
       }
 
@@ -57,12 +57,14 @@ class ApiHelper {
         throw NotFoundException(response.data["message"].toString());
       case 422:
         throw UnprocessableContentException(
-            response.data["message"].toString());
+          response.data["message"].toString(),
+        );
       case 500:
         throw InternalServerException(response.data["message"].toString());
       default:
         throw FetchDataException(
-            'Error occured while Communication with Server with StatusCode : ${response.statusCode}');
+          'Error occured while Communication with Server with StatusCode : ${response.statusCode}',
+        );
     }
   }
 }

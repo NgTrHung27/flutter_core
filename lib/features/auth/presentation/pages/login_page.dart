@@ -48,11 +48,7 @@ class LoginPage extends StatelessWidget {
                         final user = state.data;
                         context.goNamed(
                           AppRoute.home.name,
-                          pathParameters: {
-                            "user_id": user.userId ?? "",
-                            "email": user.email ?? "",
-                            "username": user.username ?? "",
-                          },
+                          extra: user,
                         );
                       }
                     },
