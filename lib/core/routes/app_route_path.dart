@@ -4,7 +4,9 @@ enum AppRoute {
   register(path: "register"),
   home(path: "/home"),
   createProduct(path: "/product/add"),
-  updateProduct(path: "/product/update/:product_id/:product_name/:product_price");
+  updateProduct(path: "/product/update/:product_id/:product_name/:product_price"),
+  profiling(path: "/profiling"),
+  memoryLeak(path: "memory-leak");
 
   final String path;
   const AppRoute({required this.path});

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../core/routes/app_route_path.dart';
 import '../../auth/domain/entities/user_entity.dart';
 
 class HomePage extends StatelessWidget {
@@ -35,6 +37,15 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 10),
             Text('Email: ${user.email}'),
             Text('User ID: ${user.userId}'),
+            const SizedBox(height: 30),
+            ElevatedButton.icon(
+              onPressed: () => context.goNamed(AppRoute.profiling.name),
+              icon: const Icon(Icons.analytics),
+              label: const Text('Go to Profiling Lab'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              ),
+            ),
           ],
         ),
       ),
