@@ -4,6 +4,8 @@ import '../../features/auth/presentation/login_page.dart';
 import '../../features/auth/presentation/pages/auth_page.dart';
 import '../../features/home/presentation/home_page.dart';
 import '../../features/auth/domain/entities/user_entity.dart';
+import '../../features/profiling/presentation/profiling_page.dart';
+import '../../features/profiling/presentation/memory_leak_page.dart';
 import 'app_route_path.dart';
 
 class AppRouteConf {
@@ -32,6 +34,20 @@ class AppRouteConf {
           final user = state.extra as UserEntity;
           return HomePage(user: user);
         },
+        routes: [
+          GoRoute(
+            path: AppRoute.profiling.path.replaceFirst('/', ''),
+            name: AppRoute.profiling.name,
+            builder: (_, _) => const ProfilingPage(),
+            routes: [
+              GoRoute(
+                path: AppRoute.memoryLeak.path,
+                name: AppRoute.memoryLeak.name,
+                builder: (_, _) => const MemoryLeakPage(),
+              ),
+            ],
+          ),
+        ],
       ),
     ],
   );
