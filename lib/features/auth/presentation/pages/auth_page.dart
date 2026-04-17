@@ -1,50 +1,85 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_core/core/constants/key_translate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_core/core/extensions/integer_sizedbox_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/configs/injector/injector_conf.dart';
+import '../../../../core/constants/key_translate.dart';
 import '../../../../core/routes/app_route_path.dart';
-import '../../../../core/themes/app_font.dart';
 import '../../../../widgets/button_widget.dart';
-
+import '../../../../widgets/snackbar_widget.dart';
+import '../bloc/auth/auth_bloc.dart';
+import '../bloc/auth_login_form/auth_login_form_bloc.dart';
+import '../widgets/app_loading_widget.dart';
+import '../widgets/auth_login_input.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
 
+  void _login(BuildContext context) {
+    primaryFocus?.unfocus();
+    final authForm = context.read<AuthLoginFormBloc>().state;
+    context.read<AuthBloc>().add(
+      AuthLoginEvent(authForm.email.trim(), authForm.password.trim()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                appTitleKey.tr(),
-                style: AppFont.bold.s16,
-                textAlign: TextAlign.center,
+    return BlocProvider(
+      create: (_) => getIt<AuthLoginFormBloc>(),
+      child: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const AuthLoginInput(),
+                  20.hS,
+                  BlocConsumer<AuthBloc, AuthState>(
+                    listener: (_, state) {
+                      if (state is AuthLoginFailureState) {
+                        appSnackBar(context, Colors.red, state.message);
+                      } else if (state is AuthLoginSuccessState) {
+                        final user = state.data;
+                        context.goNamed(
+                          AppRoute.home.name,
+                          extra: user,
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is AuthLoginLoadingState) {
+                        return const AppLoadingWidget();
+                      }
+
+                      return AppButtonWidget(
+                        label: loginKey.tr(),
+                        callback:
+                            context.watch<AuthLoginFormBloc>().state.isValid
+                            ? () {
+                                _login(context);
+                              }
+                            : null,
+                        paddingHorizontal: 30.w,
+                        paddingVertical: 10.h,
+                      );
+                    },
+                  ),
+                  10.hS,
+                  TextButton(
+                    onPressed: () {
+                      context.pushReplacementNamed(AppRoute.register.name);
+                    },
+                    child: Text(registerKey.tr()),
+                  ),
+                ],
               ),
-              60.hS,
-              AppButtonWidget(
-                label: loginKey.tr(),
-                callback: () {
-                  context.pushNamed(AppRoute.login.name);
-                },
-                paddingHorizontal: 40.w,
-                paddingVertical: 10.h,
-              ),
-              20.hS,
-              AppButtonWidget(
-                label: registerKey.tr(),
-                callback: () {
-                  context.pushNamed(AppRoute.register.name);
-                },
-                paddingHorizontal: 40.w,
-                paddingVertical: 10.h,
-              ),
-            ],
+            ),
           ),
         ),
       ),

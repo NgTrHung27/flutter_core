@@ -6,6 +6,7 @@ import '../../domain/entities/user_entity.dart';
 
 sealed class AuthLocalDataSource {
   Future<UserEntity> checkSignInStatus();
+  Future<void> logout();
 }
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
@@ -28,6 +29,18 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       }
 
       throw CacheException();
+    } catch (e) {
+      logger.e(e);
+      throw CacheException();
+    }
+  }
+
+  @override
+  Future<void> logout() async {
+    try {
+      await _secureLocalStorage.delete(key: "user_id");
+      await _secureLocalStorage.delete(key: "token");
+      await _localStorage.delete(key: "user", boxName: "cache");
     } catch (e) {
       logger.e(e);
       throw CacheException();

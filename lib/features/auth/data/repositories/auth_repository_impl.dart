@@ -58,37 +58,15 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  // @override
-  // Future<Either<Failure, void>> logout() async {
-  //   try {
-  //     final result = await _authRemoteDataSource.logout();
-
-  //     await _secureLocalStorage.delete(key: "user_id");
-  //     await _localStorage.delete(key: "user", boxName: "cache");
-
-  //     return Right(result);
-  //   } on ServerException {
-  //     return Left(ServerFailure());
-  //   }
-  // }
-
-  // @override
-  // Future<Either<Failure, void>> register(RegisterParams params) async {
-  //   try {
-  //     final model = RegisterModel(
-  //       username: params.username,
-  //       email: params.email,
-  //       password: params.password,
-  //     );
-
-  //     final result = await _authRemoteDataSource.register(model);
-  //     return Right(result);
-  //   } on DuplicateEmailException {
-  //     return Left(DuplicateEmailFailure());
-  //   } on ServerException {
-  //     return Left(ServerFailure());
-  //   }
-  // }
+  @override
+  Future<Either<Failure, void>> logout() async {
+    try {
+      await _authLocalDataSource.logout();
+      return const Right(null);
+    } catch (e) {
+      return Left(CacheFailure());
+    }
+  }
 
   @override
   Future<Either<Failure, UserEntity>> checkSignInStatus() async {

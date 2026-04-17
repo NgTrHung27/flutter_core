@@ -29,9 +29,13 @@ void configureDepedencies() {
   getIt.registerLazySingleton(() => ApiHelper(getIt<Dio>()));
 
   getIt.registerLazySingleton(
-    () =>
-        Dio(BaseOptions(baseUrl: ApiUrl.baseUrl))
-          ..interceptors.add(getIt<ApiInterceptor>()),
+    () => Dio(
+      BaseOptions(
+        baseUrl: ApiUrl.baseUrl,
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+      ),
+    )..interceptors.add(getIt<ApiInterceptor>()),
   );
 
   getIt.registerLazySingleton(() => ApiInterceptor());
