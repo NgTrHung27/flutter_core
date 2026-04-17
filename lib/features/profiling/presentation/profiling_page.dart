@@ -85,7 +85,13 @@ class _ProfilingPageState extends State<ProfilingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('DevTools Profiling Lab')),
+      appBar: AppBar(
+        title: const Text('DevTools Profiling Lab'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.pop(),
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(

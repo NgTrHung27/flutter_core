@@ -6,6 +6,7 @@ import 'package:flutter_core/features/auth/domain/usecases/usecase_params.dart';
 abstract class AuthRepository {
   Future<Either<Failure, UserEntity>> login(LoginParams params);
   Future<Either<Failure, UserEntity>> checkSignInStatus();
+  Future<Either<Failure, void>> logout();
 }
 
 /* Thay vì:

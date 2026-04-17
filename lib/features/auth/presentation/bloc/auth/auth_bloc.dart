@@ -7,6 +7,7 @@ import '../../../../../core/utils/logger.dart';
 import '../../../domain/entities/user_entity.dart';
 import '../../../domain/usecases/check_signin_status_usecase.dart';
 import '../../../domain/usecases/login_usecase.dart';
+import '../../../domain/usecases/logout_usecase.dart';
 import '../../../domain/usecases/usecase_params.dart';
 
 part 'auth_event.dart';
@@ -15,16 +16,16 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthLoginUseCase _loginUseCase;
   // final AuthRegisterUseCase _registerUseCase;
-  // final AuthLogoutUseCase _logoutUseCase;
+  final AuthLogoutUseCase _logoutUseCase;
   final AuthCheckSignInStatusUseCase _checkSignInStatusUseCase;
   AuthBloc(
     this._loginUseCase,
-    // this._logoutUseCase,
+    this._logoutUseCase,
     // this._registerUseCase,
     this._checkSignInStatusUseCase,
   ) : super(AuthInitialState()) {
     on<AuthLoginEvent>(_login);
-    // on<AuthLogoutEvent>(_logout);
+    on<AuthLogoutEvent>(_logout);
     // on<AuthRegisterEvent>(_register);
     on<AuthCheckSignInStatusEvent>(_checkSignInStatus);
   }
@@ -39,6 +40,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (l) => emit(AuthLoginFailureState(mapFailureToMessage(l))),
       (r) => emit(AuthLoginSuccessState(r)),
+    );
+  }
+
+  Future _logout(AuthLogoutEvent event, Emitter emit) async {
+    emit(AuthLogoutLoadingState());
+
+    final result = await _logoutUseCase.call(NoParams());
+
+    result.fold(
+      (l) => emit(AuthLogoutFailureState(mapFailureToMessage(l))),
+      (r) => emit(const AuthLogoutSuccessState("Logout success")),
     );
   }
 

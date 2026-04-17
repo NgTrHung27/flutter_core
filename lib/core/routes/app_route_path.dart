@@ -1,4 +1,5 @@
 enum AppRoute {
+  splash(path: "/"),
   auth(path: "/auth"),
   login(path: "login"),
   register(path: "register"),
@@ -6,6 +7,7 @@ enum AppRoute {
   createProduct(path: "/product/add"),
   updateProduct(path: "/product/update/:product_id/:product_name/:product_price"),
   profiling(path: "/profiling"),
+  repaintBoundary(path: "/repaint-boundary"),
   memoryLeak(path: "memory-leak");
 
   final String path;
