@@ -12,7 +12,8 @@ enum AppRoute {
   repaintBoundary(path: "/repaint-boundary"),
   isolateDemo(path: "isolate-demo"),
   memoryLeak(path: "memory-leak"),
-  nativeAndroid(path: "native-android");
+  nativeAndroid(path: "native-android"),
+  nativeIos(path: "native-ios");
 
   final String path;
   const AppRoute({required this.path});
