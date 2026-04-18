@@ -8,6 +8,7 @@ enum AppRoute {
   updateProduct(path: "/product/update/:product_id/:product_name/:product_price"),
   profiling(path: "/profiling"),
   repaintBoundary(path: "/repaint-boundary"),
+  isolateDemo(path: "isolate-demo"),
   memoryLeak(path: "memory-leak");
 
   final String path;
