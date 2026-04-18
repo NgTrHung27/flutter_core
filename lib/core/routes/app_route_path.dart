@@ -5,11 +5,14 @@ enum AppRoute {
   register(path: "register"),
   home(path: "/home"),
   createProduct(path: "/product/add"),
-  updateProduct(path: "/product/update/:product_id/:product_name/:product_price"),
+  updateProduct(
+    path: "/product/update/:product_id/:product_name/:product_price",
+  ),
   profiling(path: "/profiling"),
   repaintBoundary(path: "/repaint-boundary"),
   isolateDemo(path: "isolate-demo"),
-  memoryLeak(path: "memory-leak");
+  memoryLeak(path: "memory-leak"),
+  nativeAndroid(path: "native-android");
 
   final String path;
   const AppRoute({required this.path});

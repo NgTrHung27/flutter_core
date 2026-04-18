@@ -4,6 +4,7 @@ import '../../features/auth/presentation/login_page.dart';
 import '../../features/auth/presentation/pages/auth_page.dart';
 import '../../features/home/presentation/home_page.dart';
 import '../../features/auth/domain/entities/user_entity.dart';
+import '../../features/home/presentation/pages/native_android_page.dart';
 import '../../features/profiling/presentation/profiling_page.dart';
 import '../../features/profiling/presentation/memory_leak_page.dart';
 import '../../features/home/presentation/pages/repaint_boundary_demo_page.dart';
@@ -63,6 +64,11 @@ class AppRouteConf {
             path: AppRoute.isolateDemo.path,
             name: AppRoute.isolateDemo.name,
             builder: (_, _) => const IsolateDemoPage(),
+          ),
+          GoRoute(
+            path: AppRoute.nativeAndroid.path,
+            name: AppRoute.nativeAndroid.name,
+            builder: (_, _) => const NativeAndroidPage(),
           ),
         ],
       ),
