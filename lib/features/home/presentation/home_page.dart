@@ -104,6 +104,20 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: () => context.pushNamed(AppRoute.nativeIos.name),
+                icon: const Icon(Icons.settings_remote),
+                label: const Text('Method Channel (IOS)'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
