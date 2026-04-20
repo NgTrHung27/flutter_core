@@ -1,3 +1,4 @@
+import 'package:flutter_core/features/home/presentation/pages/permission_page.dart';
 import 'package:flutter_core/features/home/presentation/pages/native_ios_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -75,6 +76,11 @@ class AppRouteConf {
             path: AppRoute.nativeIos.path,
             name: AppRoute.nativeIos.name,
             builder: (_, _) => const NativeIosPage(),
+          ),
+          GoRoute(
+            path: AppRoute.permission.path,
+            name: AppRoute.permission.name,
+            builder: (_, _) => const PermissionPage(),
           ),
         ],
       ),

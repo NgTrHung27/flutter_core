@@ -45,5 +45,87 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- Allow HTTP requests -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<!-- Local Network -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Ứng dụng cần quyền truy cập mạng nội bộ để kết nối với server phát triển.</string>
+	<!-- Camera -->
+	<key>NSCameraUsageDescription</key>
+	<string>Flutter Core cần truy cập Camera để chụp ảnh và quét mã QR.</string>
+	<!-- Photos -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Flutter Core cần truy cập Thư viện ảnh để tải ảnh lên hồ sơ.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Flutter Core cần quyền lưu ảnh vào Thư viện.</string>
+	<!-- Location -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Flutter Core cần vị trí để hiển thị bản đồ và tìm kiếm địa điểm gần bạn.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Flutter Core cần quyền truy cập vị trí để cung cấp tính năng theo dõi.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Flutter Core cần quyền truy cập vị trí luôn luôn để cung cấp tính năng theo dõi.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Flutter Core cần quyền truy cập vị trí để xác định vị trí của bạn.</string>
+	<!-- Microphone -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Flutter Core cần quyền microphone để ghi âm giọng nói.</string>
+	<!-- Bluetooth -->
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Flutter Core cần quyền Bluetooth để kết nối thiết bị ngoại vi.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Flutter Core cần quyền Bluetooth để kết nối thiết bị ngoại vi.</string>
+	<!-- Contacts -->
+	<key>NSContactsUsageDescription</key>
+	<string>Flutter Core cần quyền truy cập danh bạ để thêm liên lạc.</string>
+	<!-- Calendar -->
+	<key>NSCalendarsUsageDescription</key>
+	<string>Flutter Core cần quyền truy cập lịch để quản lý sự kiện.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Flutter Core cần quyền truy cập đầy đủ lịch để quản lý sự kiện.</string>
+	<key>NSCalendarsWriteOnlyUsageDescription</key>
+	<string>Flutter Core cần quyền ghi lịch để thêm sự kiện.</string>
+	<!-- Reminders -->
+	<key>NSRemindersUsageDescription</key>
+	<string>Flutter Core cần quyền truy cập nhắc nhở để quản lý công việc.</string>
+	<!-- Media Library -->
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Flutter Core cần quyền truy cập Apple Music để phát nhạc.</string>
+	<key>NSMediaLibraryUsageDescription</key>
+	<string>Flutter Core cần quyền truy cập thư viện media để phát nhạc và video.</string>
+	<!-- Speech -->
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Flutter Core cần quyền nhận dạng giọng nói để chuyển giọng nói thành văn bản.</string>
+	<!-- Sensors -->
+	<key>NSMotionUsageDescription</key>
+	<string>Flutter Core cần quyền truy cập cảm biến để theo dõi hoạt động.</string>
+	<!-- Notification -->
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>Flutter Core cần quyền gửi thông báo để cập nhật tin tức.</string>
+	<!-- Face ID / Touch ID -->
+	<key>NSFaceIDUsageDescription</key>
+	<string>Flutter Core cần quyền Face ID để xác thực người dùng.</string>
+	<!-- App Tracking Transparency -->
+	<key>NSAppTrackingTransparencyUsageDescription</key>
+	<string>Flutter Core cần quyền theo dõi để cải thiện trải nghiệm người dùng.</string>
+	<!-- Critical Alerts -->
+	<key>NSCriticalAlertUsageDescription</key>
+	<string>Flutter Core cần quyền gửi cảnh báo quan trọng.</string>
+	<!-- Wifi -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Flutter Core cần quyền truy cập mạng cục bộ để kết nối thiết bị.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_http._tcp</string>
+		<string>_printer._tcp</string>
+		<string>_airplay._tcp</string>
+	</array>
+	<!-- Siri -->
+	<key>NSSiriUsageDescription</key>
+	<string>Flutter Core cần quyền sử dụng Siri để hỗ trợ giọng nói.</string>
 </dict>
 </plist>

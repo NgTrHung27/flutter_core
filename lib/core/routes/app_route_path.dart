@@ -13,7 +13,8 @@ enum AppRoute {
   isolateDemo(path: "isolate-demo"),
   memoryLeak(path: "memory-leak"),
   nativeAndroid(path: "native-android"),
-  nativeIos(path: "native-ios");
+  nativeIos(path: "native-ios"),
+  permission(path: "permission");
 
   final String path;
   const AppRoute({required this.path});

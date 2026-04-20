@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.flutterCore</string>
+	<string>com.hungdev.flutterCore</string>
 	<key>PROJECT_ID</key>
 	<string>flutter-core-32a5b</string>
 	<key>STORAGE_BUCKET</key>
