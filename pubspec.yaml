@@ -60,6 +60,9 @@ dependencies:
   # Dependency Injection
   get_it: ^9.0.5
 
+  # Testing
+  mocktail: ^1.0.5
+
   # Other
   app_settings: ^7.0.0
   path_provider: ^2.1.5

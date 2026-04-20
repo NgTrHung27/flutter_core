@@ -54,6 +54,8 @@ class FlutterCoreApp extends StatelessWidget {
                   // -----------------------------------------------------
                   // kProfileMode chỉ true khi bạn chạy: flutter run --profile
                   // Nghĩa là ở chế độ Debug hoặc Release, biểu đồ này sẽ tự ẩn đi.
+                  // Cuộn danh sách ở màn hình Home để xem hiệu năng, nếu có cột màu đỏ thì cần tối ưu, nếu toàn màu xanh thì ok. Đỏ khi build widget quá lâu.
+                  // Biểu đồ đó hiển thị thời gian build widget, nếu thời gian build widget quá lâu thì sẽ hiển thị màu đỏ.
                   showPerformanceOverlay: kProfileMode,
                   // -----------------------------------------------------
                   localizationsDelegates: context.localizationDelegates,
