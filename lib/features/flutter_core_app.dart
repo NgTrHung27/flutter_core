@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,23 +41,28 @@ class FlutterCoreApp extends StatelessWidget {
               if (state is AuthCheckSignInStatusSuccessState) {
                 final user = state.data;
 
-                router.goNamed(
-                  AppRoute.home.name,
-                  extra: user,
-                );
+                router.goNamed(AppRoute.home.name, extra: user);
               }
             },
             child: BlocBuilder<ThemeBloc, ThemeState>(
-            builder: (_, state) {
-              return MaterialApp.router(
-                debugShowCheckedModeBanner: false,
-                localizationsDelegates: context.localizationDelegates,
-                supportedLocales: context.supportedLocales,
-                locale: context.locale,
-                theme: AppTheme.data(state.isDarkMode),
-                routerConfig: router,
-              );
-            },
+              builder: (_, state) {
+                return MaterialApp.router(
+                  debugShowCheckedModeBanner: false,
+
+                  // -----------------------------------------------------
+                  // BẬT PERFORMANCE OVERLAY ĐỂ REVIEW HIỆU SUẤT (BÀI 14)
+                  // -----------------------------------------------------
+                  // kProfileMode chỉ true khi bạn chạy: flutter run --profile
+                  // Nghĩa là ở chế độ Debug hoặc Release, biểu đồ này sẽ tự ẩn đi.
+                  showPerformanceOverlay: kProfileMode,
+                  // -----------------------------------------------------
+                  localizationsDelegates: context.localizationDelegates,
+                  supportedLocales: context.supportedLocales,
+                  locale: context.locale,
+                  theme: AppTheme.data(state.isDarkMode),
+                  routerConfig: router,
+                );
+              },
             ),
           ),
         ),
