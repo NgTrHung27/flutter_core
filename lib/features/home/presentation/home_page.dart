@@ -118,6 +118,20 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: () => context.pushNamed(AppRoute.permission.name),
+                icon: const Icon(Icons.lock),
+                label: const Text('Permissions'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
