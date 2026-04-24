@@ -1,0 +1,41 @@
+name: Distribute to Firebase QA
+
+on:
+  push:
+    branches: [ "master", "feat/*" ] # Kích hoạt khi push lên master hoặc các nhánh tính năng
+
+jobs:
+  build_and_release:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Lấy code về
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Cài đặt Java (Cần thiết để build Android)
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # 3. Cài đặt Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      # 4. Cài đặt Ruby & Tự động chạy Bundle Install cho Fastlane
+      - name: Setup Ruby and Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: android
+
+      # 5. Kích hoạt Fastlane (Truyền Token Firebase từ GitHub Secret vào)
+      - name: Build and Distribute APK
+        working-directory: android
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: bundle exec fastlane distribute_to_qa

@@ -1,0 +1,24 @@
+default_platform(:android)
+
+platform :android do
+  desc "Tự động Build APK và đẩy lên Firebase cho Tester"
+  lane :distribute_to_qa do
+    
+    # 1. Gọi lệnh của Flutter để build APK (phải lùi ra 2 thư mục để về root project)
+    sh("cd ../.. && flutter build apk --release")
+
+    # 2. Sử dụng plugin Firebase để upload
+    firebase_app_distribution(
+      # THAY BẰNG APP ID TRÊN FIREBASE CONSOLE CỦA BẠN (VD: 1:12345678:android:abcdef)
+      # Xem ở đây: https://console.firebase.google.com/u/0/project/flutter-core-32a5b/settings/general/android:com.example.flutter_core
+      app: "1:664280682142:android:68754f2ce19d627afc358f", 
+      
+      apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
+      
+      # Sửa lại thành email thật của bạn để lát nữa nhận thông báo tải app
+      testers: "trunghungpq456@gmail.com", 
+      
+      release_notes: "Bản build thử nghiệm Fastlane đầu tiên!"
+    )
+  end
+end
