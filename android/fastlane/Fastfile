@@ -10,7 +10,8 @@ platform :android do
     # 2. Sử dụng plugin Firebase để upload
     firebase_app_distribution(
       # THAY BẰNG APP ID TRÊN FIREBASE CONSOLE CỦA BẠN (VD: 1:12345678:android:abcdef)
-      app: "flutter-core-32a5b", 
+      # Xem ở đây: https://console.firebase.google.com/u/0/project/flutter-core-32a5b/settings/general/android:com.example.flutter_core
+      app: "1:664280682142:android:68754f2ce19d627afc358f", 
       
       apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
       
