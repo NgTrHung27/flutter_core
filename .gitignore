@@ -45,7 +45,7 @@ app.*.map.json
 /android/app/release
 
 # Firebase
-lib/firebase_options.dart
+# lib/firebase_options.dart - commented for CI compatibility
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
-firebase.json
+# firebase.json - commented for CI compatibility
