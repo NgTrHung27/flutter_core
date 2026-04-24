@@ -1,4 +1,6 @@
+import 'package:fpdart/fpdart.dart';
 import '../entities/isolate_payload_entity.dart';
+import '../failures/isolate_failures.dart';
 import '../repositories/isolate_repository.dart';
 
 class GetHeavyPayloadUseCase {
@@ -6,7 +8,9 @@ class GetHeavyPayloadUseCase {
 
   GetHeavyPayloadUseCase(this.repository);
 
-  Future<IsolatePayloadEntity> call({required bool useIsolate}) async {
+  Future<Either<IsolateFailure, IsolatePayloadEntity>> call({
+    required bool useIsolate,
+  }) async {
     return repository.getHeavyPayload(useIsolate: useIsolate);
   }
 }

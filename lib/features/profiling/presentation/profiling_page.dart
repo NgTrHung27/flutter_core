@@ -133,6 +133,17 @@ class _ProfilingPageState extends State<ProfilingPage> {
               icon: const Icon(Icons.warning_amber),
               label: const Text('Go to Memory Leak Page'),
             ),
+            const SizedBox(height: 16),
+            _buildSectionHeader(
+              '4. Performance Monitoring Demo',
+              'Real-time FPS monitoring with custom DevTools integration.',
+            ),
+            ElevatedButton.icon(
+              onPressed: () => context.pushNamed(AppRoute.monitoringDemo.name),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
+              icon: const Icon(Icons.monitor_heart),
+              label: const Text('Go to Monitoring Demo'),
+            ),
           ],
         ),
       ),

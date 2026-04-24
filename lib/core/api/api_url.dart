@@ -6,7 +6,7 @@ class ApiUrl {
   // static const anotherIP = '172.16.1.205';
   // static const baseUrl = "http://$anotherIP:3000/api";
 
-  static const baseIP = "15";
+  static const baseIP = "8";
   static const baseUrl = "http://192.168.1.$baseIP:3000/api";
 
   // Auth

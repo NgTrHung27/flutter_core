@@ -6,7 +6,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:flutter_core/main.dart' as app;
 
 void main() {
-  // 1. Khởi tạo môi trường Integration Test (Bắt buộc phải có để giao tiếp với máy ảo)
+  // 1. Khởi tạo môi trường Integration Test
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('End-to-End Test: Luồng Đăng Nhập', () {
@@ -16,34 +16,69 @@ void main() {
       // 2. Khởi động toàn bộ ứng dụng
       app.main();
 
-      // Đợi app render xong khung hình đầu tiên (VD: Đợi hết Splash Screen sang Login Screen)
+      // Đợi app render xong khung hình đầu tiên và chuyển từ Splash sang trang Auth
       await tester.pumpAndSettle();
 
       // 3. Tìm các Widget trên màn hình
-      // Dưới đây giả định tìm theo Type:
-      final emailField = find.byType(TextField).first;
-      final passwordField = find.byType(TextField).last;
+      // Tìm TextFormField thay vì TextField vì AuthTextField sử dụng TextFormField
+      final emailField = find.byType(TextFormField).at(0);
+      final passwordField = find.byType(TextFormField).at(1);
 
-      // Tìm ButtonWidget dựa trên text truyền vào (Ví dụ: 'Đăng Nhập')
-      final loginButton = find.text('Đăng Nhập');
+      // Tìm Button dựa trên text 'Đăng nhập' (phải khớp với vi.json)
+      final loginButton = find.text('Đăng nhập');
 
       // 4. Giả lập người dùng gõ phím
       await tester.enterText(emailField, 'test@gmail.com');
-      await tester.pumpAndSettle(); // Đợi UI cập nhật hiển thị chữ vừa gõ
+      await tester.pumpAndSettle();
 
       await tester.enterText(passwordField, 'password123');
-      await tester.pumpAndSettle(); // Đợi ẩn bàn phím / cập nhật UI
+      await tester.pumpAndSettle();
 
       // 5. Thao tác bấm nút
       await tester.tap(loginButton);
 
-      // 6. Chờ quá trình loading (call API hoặc logic BLoC) và chuyển trang
-      // pumpAndSettle sẽ chờ đến khi không còn animation nào diễn ra
+      // 6. Chờ quá trình xử lý (AuthBloc) và chuyển sang trang Home
+      // pumpAndSettle sẽ chờ đến khi không còn animation nào (trang đã chuyển xong)
       await tester.pumpAndSettle();
 
-      // 7. ASSERT: Quả quyết kết quả
-      // Sau khi login xong, app sẽ chuyển hướng. Hãy tìm một widget/text đặc trưng để khẳng định Test Pass.
-      expect(find.text('Trang chủ'), findsOneWidget);
+      // 7. ASSERT: Kiểm tra kết quả
+      // Trong HomePage.dart, AppBar có tiêu đề là 'Home'
+      expect(find.text('Home'), findsOneWidget);
+      // Kiểm tra xem có hiển thị câu chào không
+      expect(find.textContaining('Welcome'), findsOneWidget);
+    });
+
+    testWidgets('Hiển thị lỗi khi đăng nhập với thông tin không hợp lệ', (
+      tester,
+    ) async {
+      // Khởi động toàn bộ ứng dụng
+      app.main();
+
+      // Đợi app render xong
+      await tester.pumpAndSettle();
+
+      // Tìm các Widget
+      final emailField = find.byType(TextFormField).at(0);
+      final passwordField = find.byType(TextFormField).at(1);
+      final loginButton = find.text('Đăng nhập');
+
+      // Nhập thông tin không hợp lệ
+      await tester.enterText(emailField, 'invalid');
+      await tester.pumpAndSettle();
+
+      await tester.enterText(passwordField, '123');
+      await tester.pumpAndSettle();
+
+      // Bấm nút đăng nhập
+      await tester.tap(loginButton);
+
+      // Đợi xử lý
+      await tester.pump(const Duration(seconds: 2));
+
+      // Kiểm tra có hiển thị lỗi hoặc snackbar
+      // (Tùy vào logic app có thể hiển thị lỗi khác nhau)
+      expect(find.byType(SnackBar).evaluate().isNotEmpty ||
+             find.text('Home').evaluate().isEmpty, true);
     });
   });
 }
