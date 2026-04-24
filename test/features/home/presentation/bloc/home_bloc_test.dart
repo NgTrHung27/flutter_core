@@ -89,6 +89,8 @@ void main() {
         build: () {
           when(() => mockHomeRepository.getHomeData())
               .thenAnswer((_) async => Left(HomeCacheFailure('Cache error')));
+          when(() => mockHomeRepository.getAvailableDemos())
+              .thenAnswer((_) async => Right(testDemos));
           return homeBloc;
         },
         act: (bloc) => bloc.add(LoadHomeDataEvent()),
