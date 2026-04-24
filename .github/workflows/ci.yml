@@ -1,0 +1,40 @@
+name: Flutter CI
+
+# 1. KÍCH HOẠT KHI NÀO?
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+# 2. CÁC NHIỆM VỤ CẦN LÀM
+jobs:
+  build_and_test:
+    name: Build, Analyze and Test
+    # Chạy trên server Ubuntu (nhanh và rẻ nhất của GitHub)
+    runs-on: ubuntu-latest
+
+    # 3. CHI TIẾT TỪNG BƯỚC
+    steps:
+      # Bước 1: Lấy code từ repository về máy ảo
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      # Bước 2: Setup môi trường Flutter (Dùng action nổi tiếng nhất của subosito)
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable' # Có thể thay bằng version cụ thể VD: flutter-version: '3.19.0'
+          cache: true       # Bật cache để những lần chạy sau nhanh hơn
+
+      # Bước 3: Tải các thư viện (package)
+      - name: 📦 Install Dependencies
+        run: flutter pub get
+
+      # Bước 4: Kiểm tra Format và Lỗi cú pháp (Linting)
+      - name: 🧹 Run Flutter Analyze
+        run: flutter analyze
+
+      # Bước 5: Chạy toàn bộ Unit Test & Widget Test
+      - name: 🧪 Run Flutter Test
+        run: flutter test
