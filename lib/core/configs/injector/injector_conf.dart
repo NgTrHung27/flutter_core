@@ -12,6 +12,8 @@ import '../../cache/hive_local_storage.dart';
 import '../../cache/secure_local_storage.dart';
 import '../../network/network_checker.dart';
 import '../../../features/auth/di/auth_depedency.dart';
+import '../../../features/home/di/home_dependency.dart';
+import '../../../features/profiling/di/profiling_dependency.dart';
 import '../../../features/isolate_demo/data/datasources/isolate_remote_data_source.dart';
 import '../../../features/isolate_demo/data/repositories/isolate_repository_impl.dart';
 import '../../../features/isolate_demo/domain/repositories/isolate_repository.dart';
@@ -24,6 +26,8 @@ final getIt = GetIt.I;
 
 void configureDepedencies() {
   AuthDepedency.init();
+  HomeDependency.init();
+  ProfilingDependency.init();
   // ProductDependency.init();
 
   getIt.registerLazySingleton(() => ThemeBloc());

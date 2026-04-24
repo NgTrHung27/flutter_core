@@ -14,7 +14,8 @@ enum AppRoute {
   memoryLeak(path: "memory-leak"),
   nativeAndroid(path: "native-android"),
   nativeIos(path: "native-ios"),
-  permission(path: "permission");
+  permission(path: "permission"),
+  monitoringDemo(path: "monitoring-demo");
 
   final String path;
   const AppRoute({required this.path});
