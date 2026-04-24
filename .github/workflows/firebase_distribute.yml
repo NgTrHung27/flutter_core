@@ -2,7 +2,7 @@ name: Distribute to Firebase QA
 
 on:
   push:
-    branches: [ "master", "feat/*" ] # Kích hoạt khi push lên master hoặc các nhánh tính năng
+    branches: [ "master", "main", "feat/*" ]
 
 jobs:
   build_and_release:
@@ -24,6 +24,12 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          
+      # ========================================================
+      # BƯỚC QUAN TRỌNG: TẠO FILE GOOGLE-SERVICES TỪ SECRET
+      # ========================================================
+      - name: 📝 Create google-services.json
+        run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > android/app/google-services.json
 
       # 4. Cài đặt Ruby & Tự động chạy Bundle Install cho Fastlane
       - name: Setup Ruby and Fastlane
@@ -33,9 +39,10 @@ jobs:
           bundler-cache: true
           working-directory: android
 
-      # 5. Kích hoạt Fastlane (Truyền Token Firebase từ GitHub Secret vào)
+      # 5. Kích hoạt Fastlane
       - name: Build and Distribute APK
         working-directory: android
         env:
+          # Token này dùng để Fastlane có quyền upload lên Firebase
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: bundle exec fastlane distribute_to_qa
