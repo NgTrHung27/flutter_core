@@ -1,0 +1,5 @@
+# app_identifier("#{bundle_identifier}")
+# username("user@fastlane.tools")
+
+# For more information about the Appfile, see:
+# https://docs.fastlane.tools/advanced/#appfile
