@@ -1,0 +1,33 @@
+# This file contains the fastlane.tools configuration
+# You need to set up your project to use fastlane:
+# https://docs.fastlane.tools/getting-started/ios/setup/
+
+# For a list of all available actions, check out:
+# https://docs.fastlane.tools/actions
+
+# increase the verbosity of the output
+opt_out_usage
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Build the iOS application"
+  lane :build do
+    # Build your iOS app
+    # This is a placeholder lane - you can customize it later
+    puts("Building iOS app...")
+  end
+
+  desc "Run tests"
+  lane :test do
+    # Run tests
+    # This is a placeholder lane - you can customize it later
+    puts("Running tests...")
+  end
+
+  desc "Submit a new Beta Build to TestFlight"
+  lane :beta do
+    # This lane will be expanded with more actions in the future
+    puts("Submitting to TestFlight...")
+  end
+end
