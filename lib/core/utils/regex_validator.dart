@@ -1,6 +1,8 @@
 class RegexValidator {
   RegexValidator._();
 
-  static final email = RegExp(r"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$");
-  static final password = RegExp(r"^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$");
+// ignore: deprecated_member_use
+  static Pattern get email => RegExp(r"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$");
+// ignore: deprecated_member_use
+  static Pattern get password => RegExp(r"^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$");
 }

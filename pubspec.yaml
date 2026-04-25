@@ -93,4 +93,5 @@ flutter:
     - assets/images/
     - assets/svgs/
     - assets/translations/
+    - shorebird.yaml
 #--------LOCAL FONTS---------------#
