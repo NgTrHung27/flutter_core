@@ -8,8 +8,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import '../utils/logger.dart';
 import '../api/api_url.dart';
 
-/// Default Root CA fingerprint của Let's Encrypt (ISRG Root X1).
-/// Sống đến năm 2035 - dùng làm backup khi Firebase lỗi.
+// Mã backup cứng trong trường hợp Firebase bị sập hoặc rớt mạng
 const sslPinningRootCaBackup =
     "4E:60:2F:FB:2A:B3:D6:8F:7E:16:D7:C6:BB:62:3D:62:0C:9E:14:38:B7:13:A6:A9:5B:4B:04:D3:A8:70:4A:29";
 

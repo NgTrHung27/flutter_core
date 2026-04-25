@@ -37,16 +37,16 @@ android {
 
     buildTypes {
         release {
-                    // Bật tính năng tối ưu và làm rối code Native
-        minifyEnabled true
+            // Bật tính năng tối ưu và làm rối code Native
+            isMinifyEnabled = true
 
-        // Xóa bỏ các resource (ảnh, font) không được gọi tới để giảm size APK
-        shrinkResources true
+            // Xóa bỏ các resource (ảnh, font) không được gọi tới để giảm size APK
+            isShrinkResources = true
 
-        // Đọc các luật bảo vệ từ file proguard-rules.pro
-        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Đọc các luật bảo vệ từ file proguard-rules.pro
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-        signingConfig signingConfigs.release
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }
