@@ -46,7 +46,8 @@ android {
             // Đọc các luật bảo vệ từ file proguard-rules.pro
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-            signingConfig = signingConfigs.getByName("release")
+            // Firebase App Distribution sẽ tự ký APK
+            // signingConfig = signingConfigs.getByName("release")
         }
     }
 }
