@@ -64,6 +64,11 @@ dependencies:
   mocktail: ^1.0.5
   bloc_test: ^10.0.0
 
+  # Secure SSL Pinning
+  http_certificate_pinning: ^3.0.1
+  firebase_remote_config: ^6.4.0
+
+
   # Other
   app_settings: ^7.0.0
   path_provider: ^2.1.5

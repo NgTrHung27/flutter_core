@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-
 import 'api_exception.dart';
 
 class ApiHelper {
@@ -37,6 +36,16 @@ class ApiHelper {
     } on SocketException {
       throw FetchDataException('No Internet connection');
     } on DioException catch (e) {
+      // Bắt riêng cái lỗi do SSL Pinning quăng ra
+      if (e.type == DioExceptionType.connectionError &&
+          e.error.toString().contains('CẢNH BÁO')) {
+        throw Exception(
+          "Kết nối không an toàn. Vui lòng kiểm tra lại mạng của bạn!",
+        );
+        // Hoặc throw một SecurityException/Failure của riêng bạn để Bloc show popup
+      }
+
+      // Các lỗi Dio khác (Timeout, 404, 500...) xử lý bình thường ở đây
       return _returnResponse(e.response!);
     }
   }
