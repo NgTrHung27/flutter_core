@@ -29,10 +29,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, UserEntity>> login(LoginParams params) async {
     try {
-      final model = LoginModel(
-        email: params.email,
-        password: params.password,
-      );
+      final model = LoginModel(email: params.email, password: params.password);
 
       final result = await _authRemoteDataSource.login(model);
 

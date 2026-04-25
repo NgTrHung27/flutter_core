@@ -33,7 +33,8 @@ void main() async {
 
   configureAdapter();
 
-  configureDepedencies();
+  // Đợi cấu hình dependency (bao gồm việc kéo SSL Pins từ Remote Config) hoàn tất
+  await configureDepedencies();
 
   Bloc.observer = AppBlocObserver();
   debugRepaintRainbowEnabled = true;
