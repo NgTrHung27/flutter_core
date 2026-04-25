@@ -7,9 +7,15 @@ class SecureLocalStorage implements LocalStorage {
 
   @override
   Future<String> load({required String key, String? boxName}) async {
-    final result = await _storage.read(key: key);
-
-    return result ?? "";
+    try {
+      final result = await _storage.read(key: key);
+      return result ?? "";
+    } on Exception catch (_) {
+      // Corrupted Keystore → Reset và force logout
+      await _storage.deleteAll();
+      // Trigger force logout event
+      rethrow;
+    }
   }
 
   @override
