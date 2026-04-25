@@ -1,10 +1,7 @@
 plugins {
     id("com.android.application")
-    // START: FlutterFire Configuration
     id("com.google.gms.google-services")
-    // END: FlutterFire Configuration
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -24,10 +21,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.flutter_core"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -35,19 +29,25 @@ android {
         multiDexEnabled = true
     }
 
+    signingConfigs {
+        if (file("release.jks").exists()) {
+            create("release") {
+                storeFile = file("release.jks")
+                storePassword = "password123"
+                keyAlias = "release"
+                keyPassword = "password123"
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // Bật tính năng tối ưu và làm rối code Native
             isMinifyEnabled = true
-
-            // Xóa bỏ các resource (ảnh, font) không được gọi tới để giảm size APK
             isShrinkResources = true
-
-            // Đọc các luật bảo vệ từ file proguard-rules.pro
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-
-            // Firebase App Distribution sẽ tự ký APK
-            // signingConfig = signingConfigs.getByName("release")
+            if (signingConfigs.findByName("release") != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 }
