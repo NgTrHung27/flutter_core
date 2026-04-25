@@ -5,8 +5,8 @@ platform :android do
   lane :distribute_to_qa do
     
     # 1. Gọi lệnh của Flutter để build APK (phải lùi ra 2 thư mục để về root project)
-    sh("cd ../.. && flutter build apk --release")
-
+# Sửa lại dòng này trong Fastfile:
+sh("cd ../.. && flutter build apk --release --obfuscate --split-debug-info=build/app/outputs/symbols")
     # 2. Sử dụng plugin Firebase để upload
     firebase_app_distribution(
       # THAY BẰNG APP ID TRÊN FIREBASE CONSOLE CỦA BẠN (VD: 1:12345678:android:abcdef)
