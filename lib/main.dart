@@ -6,22 +6,46 @@ import "package:flutter/rendering.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "package:hydrated_bloc/hydrated_bloc.dart";
 import "package:path_provider/path_provider.dart";
+import "package:flutter_secure_storage/flutter_secure_storage.dart";
 
 import "core/configs/adapter/adapter_conf.dart";
+import "core/configs/injector/injector_conf.dart";
 import "core/constants/list_translation_locale.dart";
 import "core/utils/observer.dart";
-import "core/configs/injector/injector_conf.dart";
 import "features/flutter_core_app.dart";
 import "firebase_options.dart";
+
+const _kAppConfigBox = "_app_config";
+const _kFirstRunKey = "_is_first_run_done";
+
+Future<void> _clearOldKeychainOnFirstRun() async {
+  final box = await Hive.openBox(_kAppConfigBox);
+  final isFirstRun = !(box.get(_kFirstRunKey, defaultValue: false) as bool);
+
+  if (isFirstRun) {
+    // On iOS, Keychain persists after uninstall, so we clear it on fresh install
+    // to prevent stale tokens from previous installs.
+    await const FlutterSecureStorage(
+      aOptions: AndroidOptions(),
+      iOptions: IOSOptions(
+        accessibility: KeychainAccessibility.first_unlock_this_device,
+      ),
+    ).deleteAll();
+
+    await box.put(_kFirstRunKey, true);
+  }
+}
 
 //Test
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await Hive.initFlutter();
+
+  await _clearOldKeychainOnFirstRun();
 
   await Future.wait([
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
-    Hive.initFlutter(),
     getTemporaryDirectory().then((dir) async {
       HydratedBloc.storage = await HydratedStorage.build(
         storageDirectory: kIsWeb

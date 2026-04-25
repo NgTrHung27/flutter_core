@@ -202,7 +202,7 @@ packages:
     source: hosted
     version: "0.3.5+2"
   crypto:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: crypto
       sha256: c8ea0233063ba03258fbcf2ca4d6dadfefe14f02fab57702265467a19f27fadf
@@ -695,14 +695,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.6.0"
-  http_certificate_pinning:
-    dependency: "direct main"
-    description:
-      name: http_certificate_pinning
-      sha256: "1501c69142a3906a5ad4876d7e71696fa6a6a187fc6f4a746d7a5ba32f9f8fcf"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.1"
   http_multi_server:
     dependency: transitive
     description:
