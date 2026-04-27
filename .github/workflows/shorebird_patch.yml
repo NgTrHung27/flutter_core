@@ -1,0 +1,46 @@
+name: 🩹 Shorebird OTA Patch
+
+# Trigger thủ công khi cần hotfix khẩn
+# KHÔNG cần bump version, users tự nhận update
+on:
+  workflow_dispatch:
+    inputs:
+      patch_notes:
+        description: "Mô tả hotfix này là gì"
+        required: true
+        default: "Hotfix patch"
+
+jobs:
+  push_patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          cache: true
+
+      - name: 🐦 Setup Shorebird
+        uses: shorebirdtech/setup-shorebird@v1
+        with:
+          cache: true
+
+      - name: 📝 Create google-services.json
+        run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > android/app/google-services.json
+
+      # Push OTA patch - users tự nhận mà không cần cài lại APK
+      - name: 🩹 Push Shorebird OTA Patch
+        env:
+          SHOREBIRD_TOKEN: ${{ secrets.SHOREBIRD_TOKEN }}
+        run: |
+          echo "🩹 Pushing patch: ${{ github.event.inputs.patch_notes }}"
+          shorebird patch android

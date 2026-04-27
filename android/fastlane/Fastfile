@@ -1,20 +1,33 @@
 default_platform(:android)
 
 platform :android do
-  desc "Tự động Build APK và đẩy lên Firebase cho Tester"
+  # ============================================================
+  # LANE: Build APK (có Shorebird SDK) + Distribute lên Firebase
+  #
+  # Flow đúng:
+  #   shorebird release android --artifact apk
+  #     → Build APK với Shorebird SDK được nhúng vào
+  #     → Đăng ký release lên Shorebird server
+  #     → APK output: build/app/outputs/flutter-apk/app-release.apk
+  #   firebase_app_distribution
+  #     → Upload APK vừa build lên Firebase cho QA tester
+  #
+  # Trigger: Push tag version (v1.0.0) hoặc manual dispatch
+  # ============================================================
+  desc "Build APK với Shorebird SDK và phân phối lên Firebase"
   lane :distribute_to_qa do
+    # 1. Build APK (có Shorebird SDK nhúng vào) + đăng ký release
+    #    --artifact apk: output APK thay vì AAB mặc định
+    #    Các flutter flag truyền sau '--'
+    sh("cd ../.. && shorebird release android --artifact apk -- --obfuscate --split-debug-info=build/app/outputs/symbols")
 
-    # 1. Build APK bằng Shorebird (cú pháp đúng)
-    # - 'shorebird release android' sẽ build release APK
-    # - Các flutter flag truyền sau '--' (dấu 2 gạch)
-    sh("cd ../.. && shorebird release android -- --obfuscate --split-debug-info=build/app/outputs/symbols")
-
-    # 2. Upload APK lên Firebase App Distribution
+    # 2. Upload APK lên Firebase App Distribution cho QA
+    release_notes = ENV["RELEASE_NOTES"] || "Bản release mới!"
     firebase_app_distribution(
       app: "1:664280682142:android:68754f2ce19d627afc358f",
       apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
       testers: "trunghungpq456@gmail.com",
-      release_notes: "Bản build tự động từ CI/CD!"
+      release_notes: release_notes
     )
   end
 end
