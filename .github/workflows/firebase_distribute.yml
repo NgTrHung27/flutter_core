@@ -33,8 +33,10 @@ jobs:
       - name: Install Shorebird
         run: |
           curl --proto '=https' --tlsv1.2 https://raw.githubusercontent.com/shorebirdtech/install/main/install.sh -sSf | bash
-          echo "$HOME/.shorebird/bin" >> $GITHUB_PATH
-          export PATH="$HOME/.shorebird/bin:$PATH"
+          # Thêm đúng shorebird bin vào PATH (cài vào XDG_CONFIG_HOME nếu có set)
+          SHOREBIRD_DIR="${XDG_CONFIG_HOME:-$HOME}/.shorebird"
+          echo "$SHOREBIRD_DIR/bin" >> $GITHUB_PATH
+          export PATH="$SHOREBIRD_DIR/bin:$PATH"
           shorebird --version
       # ========================================================
       # BƯỚC QUAN TRỌNG: TẠO FILE GOOGLE-SERVICES TỪ SECRET
