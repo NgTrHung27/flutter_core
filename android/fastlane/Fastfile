@@ -4,18 +4,24 @@ platform :android do
   desc "Tự động Build APK và đẩy lên Firebase cho Tester"
   lane :distribute_to_qa do
 
-    # 1. Build APK thường (để upload Firebase)
+    # 1. Clean build folder trước
+    sh("cd ../.. && flutter clean")
+
+    # 2. Build APK thường (để upload Firebase)
     sh("cd ../.. && flutter build apk --release")
 
-    # 2. Upload APK lên Firebase App Distribution
+    # 3. Upload APK lên Firebase App Distribution
     firebase_app_distribution(
       app: "1:664280682142:android:68754f2ce19d627afc358f",
       apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
       testers: "trunghungpq456@gmail.com",
       release_notes: "Bản build tự động từ CI/CD!"
     )
+  end
 
-    # 3. Tạo Shorebird patch (OTA update)
+  desc "Tạo Shorebird patch cho OTA update"
+  lane :shorebird_patch do
+    sh("cd ../.. && flutter clean")
     sh("cd ../.. && shorebird patch android")
   end
 end
