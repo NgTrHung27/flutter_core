@@ -25,9 +25,9 @@ jobs:
         with:
           channel: 'stable'
 
-      # 3.1 Cài Git (yêu cầu bắt buộc cho shorebird)
-      - name: Setup Git
-        run: sudo apt-get update && sudo apt-get install -y git
+      # 3.1 Cài Git và curl (yêu cầu bắt buộc cho shorebird)
+      - name: Setup Git and dependencies
+        run: sudo apt-get update && sudo apt-get install -y git curl
 
       # 3.2 Cài đặt Shorebird CLI (theo đúng docs)
       - name: Install Shorebird
