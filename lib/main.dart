@@ -36,7 +36,7 @@ Future<void> _clearOldKeychainOnFirstRun() async {
   }
 }
 
-//Test
+// Test: CI/CD trigger - $(date)
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
