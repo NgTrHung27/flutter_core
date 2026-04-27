@@ -29,12 +29,11 @@ jobs:
       - name: Setup Git
         run: sudo apt-get update && sudo apt-get install -y git
 
-      # 3.2 Cài đặt Shorebird CLI
+      # 3.2 Cài đặt Shorebird CLI (đúng cách theo docs)
       - name: Install Shorebird
         run: |
-          git clone https://github.com/shorebirdtech/shorebird.git "$HOME/shorebird"
-          "$HOME/shorebird/install.sh"
-          echo "$HOME/.shorebird/bin" >> $GITHUB_PATH
+          git clone -b stable https://github.com/shorebirdtech/shorebird.git "$HOME/shorebird"
+          echo "$HOME/shorebird/bin" >> $GITHUB_PATH
           shorebird --version
       # ========================================================
       # BƯỚC QUAN TRỌNG: TẠO FILE GOOGLE-SERVICES TỪ SECRET
