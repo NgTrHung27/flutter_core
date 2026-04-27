@@ -4,10 +4,20 @@ platform :android do
   desc "Tự động Build APK và đẩy lên Firebase cho Tester"
   lane :distribute_to_qa do
 
+    # 0. Tạo keystore từ base64 nếu chưa có
+    unless File.exist?("../app/release.jks")
+      puts "Creating keystore from base64..."
+      ENV["KEYSTORE_BASE64"] ||= ""
+      if ENV["KEYSTORE_BASE64"].to_s.length > 100
+        File.write("../app/release.jks", Base64.decode64(ENV["KEYSTORE_BASE64"]))
+        puts "Keystore created"
+      end
+    end
+
     # 1. Clean build folder trước
     sh("cd ../.. && flutter clean")
 
-    # 2. Build APK thường (để upload Firebase)
+    # 2. Build APK đã sign
     sh("cd ../.. && flutter build apk --release")
 
     # 3. Upload APK lên Firebase App Distribution
