@@ -12,7 +12,7 @@ import UIKit
     let controller: FlutterViewController = window?.rootViewController as! FlutterViewController
     // 1. Khai báo Channel iOS
     let iosChannel = FlutterMethodChannel(
-      name: "com.example.flutter_core/ios_channel",
+      name: "com.hungdevmobile.flutter_core/ios_channel",
       binaryMessenger: controller.binaryMessenger)
 
     // 2. Lắng nghe tin nhắn từ Dart

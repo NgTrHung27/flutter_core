@@ -1,4 +1,4 @@
-package com.example.flutter_core
+package com.hungdevmobile.flutter_core
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -15,7 +15,7 @@ import androidx.annotation.NonNull
 
 class MainActivity : FlutterActivity(){
     // 1. Đặt tên Channel (Phải duy nhất)
-    private val CHANNEL = "com.example.flutter_core/android_channel"
+    private val CHANNEL = "com.hungdevmobile.flutter_core/android_channel"
     
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine){
         super.configureFlutterEngine(flutterEngine)
