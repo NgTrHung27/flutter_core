@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                'Welcome, ${user.username ?? user.email}!',
+                'Welcome Hehe 27/1/2026: 19h10m ${user.username ?? user.email}!',
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 10),

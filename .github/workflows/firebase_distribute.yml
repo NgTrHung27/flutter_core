@@ -2,7 +2,7 @@ name: Distribute to Firebase QA
 
 on:
   push:
-    branches: [ "master", "main", "feat/*" ]
+    branches: [ "master", "main" ]
 
 jobs:
   build_and_release:
