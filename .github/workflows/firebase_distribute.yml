@@ -1,51 +1,37 @@
-name: 🚀 Release & Distribute to Firebase QA
+name: 🚀 Build & Distribute to Firebase QA
 
-# Chỉ trigger khi tạo tag version (VD: v1.0.0, v1.2.3)
-# Hoặc trigger thủ công từ GitHub Actions UI
 on:
   push:
-    tags:
-      - "v*.*.*"
+    branches: ["master", "main"]
   workflow_dispatch:
-    inputs:
-      release_notes:
-        description: "Ghi chú cho bản release này"
-        required: false
-        default: "Bản release mới từ CI/CD"
 
 jobs:
   build_and_release:
     runs-on: ubuntu-latest
     steps:
-      # 1. Lấy code về
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Cài đặt Java
       - name: ☕ Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: "zulu"
           java-version: "17"
 
-      # 3. Cài đặt Flutter
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: "stable"
           cache: true
 
-      # 4. Cài đặt Shorebird CLI (official action)
       - name: 🐦 Setup Shorebird
         uses: shorebirdtech/setup-shorebird@v1
         with:
           cache: true
 
-      # 5. Tạo file google-services.json từ Secret
       - name: 📝 Create google-services.json
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > android/app/google-services.json
 
-      # 6. Cài đặt Ruby & Fastlane
       - name: 💎 Setup Ruby and Fastlane
         uses: ruby/setup-ruby@v1
         with:
@@ -53,11 +39,9 @@ jobs:
           bundler-cache: true
           working-directory: android
 
-      # 7. Build APK với Shorebird SDK nhúng vào + Upload lên Firebase
-      - name: 🚀 Build & Distribute to Firebase
+      - name: 🚀 Build and Distribute APK
         working-directory: android
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           SHOREBIRD_TOKEN: ${{ secrets.SHOREBIRD_TOKEN }}
-          RELEASE_NOTES: ${{ github.event.inputs.release_notes || format('Release {0}', github.ref_name) }}
         run: bundle exec fastlane distribute_to_qa
