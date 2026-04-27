@@ -37,6 +37,11 @@ jobs:
       - name: ✅ Verify google-services.json
         run: cat android/app/google-services.json | head -5
 
+      - name: 🔐 Setup Keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/release.jks
+          echo "Keystore created successfully"
+
       - name: 🔢 Auto Increment Version
         run: |
           VERSION=$(grep "^version:" pubspec.yaml | awk '{print $2}')
