@@ -3,7 +3,9 @@ import 'package:flutter/foundation.dart';
 
 class NativeIosUtil {
   // Đặt tên Channel khớp với Swift
-  static const platform = MethodChannel('com.example.flutter_core/ios_channel');
+  static const platform = MethodChannel(
+    'com.hungdevmobile.flutter_core/ios_channel',
+  );
 
   static Future<String> getBatteryLevel() async {
     try {

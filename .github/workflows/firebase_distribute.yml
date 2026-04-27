@@ -32,6 +32,22 @@ jobs:
       - name: 📝 Create google-services.json
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > android/app/google-services.json
 
+      - name: 🔢 Auto Increment Version
+        run: |
+          VERSION=$(grep "^version:" pubspec.yaml | awk '{print $2}')
+          echo "Current version: $VERSION"
+          IFS='+' read -r VERSION_PART BUILD_PART <<< "$VERSION"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION_PART"
+          if [ -z "$BUILD_PART" ]; then
+            NEW_BUILD=1
+          else
+            NEW_BUILD=$((BUILD_PART + 1))
+          fi
+          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}+${NEW_BUILD}"
+          echo "New version: $NEW_VERSION"
+          sed -i "s/^version: .*/version: $NEW_VERSION/" pubspec.yaml
+          cd android/app && sed -i "s/versionCode = flutter.versionCode/versionCode = $NEW_BUILD/" build.gradle.kts && cd ../..
+
       - name: 💎 Setup Ruby and Fastlane
         uses: ruby/setup-ruby@v1
         with:

@@ -12,7 +12,7 @@ platform :android do
 
     # 3. Upload APK lên Firebase App Distribution
     firebase_app_distribution(
-      app: "1:664280682142:android:68754f2ce19d627afc358f",
+      app: "1:664280682142:android:830fe892c914d908fc358f",
       apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
       testers: "trunghungpq456@gmail.com",
       release_notes: "Bản build tự động từ CI/CD!"

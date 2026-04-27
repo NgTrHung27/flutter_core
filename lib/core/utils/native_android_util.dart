@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 class NativeAndroidUtil {
   // 1. Khai báo Channel với tên y hệt bên Kotlin
   static const platform = MethodChannel(
-    'com.example.flutter_core/android_channel',
+    'com.hungdevmobile.flutter_core/android_channel',
   );
 
   static Future<String> getBatteryLevel() async {
