@@ -2,58 +2,52 @@ name: Distribute to Firebase QA
 
 on:
   push:
-    branches: [ "master", "main" ]
+    branches: ["master", "main"]
 
 jobs:
   build_and_release:
     runs-on: ubuntu-latest
     steps:
       # 1. Lấy code về
-      - name: Checkout Code
-        uses: actions/checkout@v3
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
 
       # 2. Cài đặt Java (Cần thiết để build Android)
-      - name: Setup Java
-        uses: actions/setup-java@v3
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: "zulu"
+          java-version: "17"
 
       # 3. Cài đặt Flutter
-      - name: Setup Flutter
+      - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
+          cache: true
 
-      # 3.1 Cài Git và curl (yêu cầu bắt buộc cho shorebird)
-      - name: Setup Git and dependencies
-        run: sudo apt-get update && sudo apt-get install -y git curl
+      # 4. Cài đặt Shorebird CLI (Dùng official action - đúng cách nhất)
+      - name: 🐦 Setup Shorebird
+        uses: shorebirdtech/setup-shorebird@v1
+        with:
+          cache: true
 
-      # 3.2 Cài đặt Shorebird CLI (clone trực tiếp)
-      - name: Install Shorebird
-        run: |
-          git clone https://github.com/shorebirdtech/shorebird.git -b stable /home/runner/.config/shorebird
-          /home/runner/.config/shorebird/bin/shorebird --version
-        env:
-          PATH: /home/runner/.config/shorebird/bin:$PATH
-      # ========================================================
-      # BƯỚC QUAN TRỌNG: TẠO FILE GOOGLE-SERVICES TỪ SECRET
-      # ========================================================
+      # 5. Tạo file google-services.json từ Secret
       - name: 📝 Create google-services.json
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > android/app/google-services.json
 
-      # 4. Cài đặt Ruby & Tự động chạy Bundle Install cho Fastlane
-      - name: Setup Ruby and Fastlane
+      # 6. Cài đặt Ruby & Chạy Bundle Install cho Fastlane
+      - name: 💎 Setup Ruby and Fastlane
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'
+          ruby-version: "3.2"
           bundler-cache: true
           working-directory: android
 
-      # 5. Kích hoạt Fastlane
-      - name: Build and Distribute APK
+      # 7. Build và Distribute APK lên Firebase
+      - name: 🚀 Build and Distribute APK
         working-directory: android
         env:
-          # Token này dùng để Fastlane có quyền upload lên Firebase
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          SHOREBIRD_TOKEN: ${{ secrets.SHOREBIRD_TOKEN }}
         run: bundle exec fastlane distribute_to_qa
