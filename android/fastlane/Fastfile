@@ -4,10 +4,8 @@ platform :android do
   desc "Tự động Build APK và đẩy lên Firebase cho Tester"
   lane :distribute_to_qa do
 
-    # 1. Tạo OTA Patch bằng Shorebird (không cần bump version)
-    # - 'shorebird patch android' tạo patch trên release đã có
-    # - Users tự nhận update mà không cần cài lại APK
-    sh("cd ../.. && shorebird patch android")
+    # 1. Build APK thường (để upload Firebase)
+    sh("cd ../.. && flutter build apk --release")
 
     # 2. Upload APK lên Firebase App Distribution
     firebase_app_distribution(
@@ -16,5 +14,8 @@ platform :android do
       testers: "trunghungpq456@gmail.com",
       release_notes: "Bản build tự động từ CI/CD!"
     )
+
+    # 3. Tạo Shorebird patch (OTA update)
+    sh("cd ../.. && shorebird patch android")
   end
 end
