@@ -24,7 +24,11 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          
+      # 3.1 Cài đặt Shorebird CLI (Cần thiết cho Code Push)
+      - name: Install Shorebird
+        run: |
+          curl -sL https://shorebird.s3.amazonaws.com/shorebird.sh | bash
+          echo "$HOME/.shorebird/bin" >> $GITHUB_PATH
       # ========================================================
       # BƯỚC QUAN TRỌNG: TẠO FILE GOOGLE-SERVICES TỪ SECRET
       # ========================================================
