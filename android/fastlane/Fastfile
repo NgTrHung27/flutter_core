@@ -10,10 +10,11 @@ platform :android do
     # 2. Get version từ pubspec.yaml
     version = sh("cd ../.. && grep '^version:' pubspec.yaml | awk '{print $2}'").strip
 
-    # 3. Build baseline (lần đầu) hoặc patch (các lần sau)
-    # Dùng --release-version để specify version cụ thể
-    # Nếu chưa có release cho version này, nó sẽ tự tạo baseline
-    sh("cd ../.. && shorebird patch android --release-version=#{version}")
+    # 3. Build và đăng ký release với Shorebird
+    # shorebird release tạo baseline APK + đăng ký version với Shorebird servers
+    # App Android được build bằng shorebird release sẽ có Shorebird runtime
+    # → có thể nhận các patch từ Shorebird servers
+    sh("cd ../.. && shorebird release android --release-version=#{version}")
 
     # 4. Upload APK lên Firebase App Distribution
     firebase_app_distribution(
