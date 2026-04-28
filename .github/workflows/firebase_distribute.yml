@@ -66,71 +66,11 @@ jobs:
           # Update pubspec.yaml
           sed -i "s/^version: .*/version: $NEW_VERSION/" pubspec.yaml
           
-          # Update build.gradle.kts - use direct version code
-          cat > android/app/build.gradle.kts << GRADLE_EOF
-plugins {
-    id("com.android.application")
-    id("com.google.gms.google-services")
-    id("kotlin-android")
-    id("dev.flutter.flutter-gradle-plugin")
-}
-
-android {
-    namespace = "com.hungdevmobile.flutter_core"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
-
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-    }
-
-    defaultConfig {
-        applicationId = "com.hungdevmobile.flutter_core"
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = $NEW_BUILD
-        versionName = "$NEW_VERSION"
-        multiDexEnabled = true
-    }
-
-    signingConfigs {
-        if (file("release.jks").exists()) {
-            create("release") {
-                storeFile = file("release.jks")
-                storePassword = "password123"
-                keyAlias = "release"
-                keyPassword = "password123"
-            }
-        }
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            if (signingConfigs.findByName("release") != null) {
-                signingConfig = signingConfigs.getByName("release")
-            }
-        }
-    }
-}
-
-dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
-}
-
-flutter {
-    source = "../.."
-}
-GRADLE_EOF
-          echo "Build.gradle.kts updated with versionCode=$NEW_BUILD"
+          # Update build.gradle.kts - simple sed replacements
+          sed -i "s/versionCode = flutter.versionCode/versionCode = $NEW_BUILD/" android/app/build.gradle.kts
+          sed -i "s/versionName = flutter.versionName/versionName = \"$NEW_VERSION\"/" android/app/build.gradle.kts
+          
+          echo "Updated versionCode=$NEW_BUILD, versionName=$NEW_VERSION"
 
       - name: 💎 Setup Ruby and Fastlane
         uses: ruby/setup-ruby@v1
