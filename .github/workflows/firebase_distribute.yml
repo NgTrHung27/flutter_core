@@ -67,7 +67,7 @@ jobs:
           sed -i "s/^version: .*/version: $NEW_VERSION/" pubspec.yaml
           
           # Update build.gradle.kts - use direct version code
-          cat > android/app/build.gradle.kts << 'GRADLE_EOF'
+          cat > android/app/build.gradle.kts << GRADLE_EOF
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
