@@ -7,11 +7,15 @@ platform :android do
     # 1. Clean build folder trước
     sh("cd ../.. && flutter clean")
 
-    # 2. Build với Shorebird
-    # shorebird patch tự detect: lần đầu = tạo baseline, lần sau = tạo patch
-    sh("cd ../.. && shorebird patch android --force")
+    # 2. Get version từ pubspec.yaml
+    version = sh("cd ../.. && grep '^version:' pubspec.yaml | awk '{print $2}'").strip
 
-    # 3. Upload APK lên Firebase App Distribution
+    # 3. Build baseline (lần đầu) hoặc patch (các lần sau)
+    # Dùng --release-version để specify version cụ thể
+    # Nếu chưa có release cho version này, nó sẽ tự tạo baseline
+    sh("cd ../.. && shorebird patch android --release-version=#{version}")
+
+    # 4. Upload APK lên Firebase App Distribution
     firebase_app_distribution(
       app: "1:664280682142:android:830fe892c914d908fc358f",
       apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
