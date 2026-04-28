@@ -7,8 +7,9 @@ platform :android do
     # 1. Clean build folder trước
     sh("cd ../.. && flutter clean")
 
-    # 2. Build APK đã sign
-    sh("cd ../.. && flutter build apk --release")
+    # 2. Build với Shorebird
+    # shorebird patch tự detect: lần đầu = tạo baseline, lần sau = tạo patch
+    sh("cd ../.. && shorebird patch android --force")
 
     # 3. Upload APK lên Firebase App Distribution
     firebase_app_distribution(

@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                'Welcome Hehe 27/1/2026: 19h10m ${user.username ?? user.email}!',
+                'Welcome Hehe Test Shorebird ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}: ${DateTime.now().hour}h${DateTime.now().minute}m ${user.username ?? user.email}!',
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 10),
