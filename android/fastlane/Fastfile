@@ -14,7 +14,7 @@ platform :android do
     # shorebird release tạo baseline APK + đăng ký version với Shorebird servers
     # App Android được build bằng shorebird release sẽ có Shorebird runtime
     # → có thể nhận các patch từ Shorebird servers
-    sh("cd ../.. && shorebird release android --release-version=#{version}")
+    sh("cd ../.. && shorebird release android")
 
     # 4. Upload APK lên Firebase App Distribution
     firebase_app_distribution(
