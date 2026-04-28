@@ -46,19 +46,91 @@ jobs:
 
       - name: 🔢 Auto Increment Version
         run: |
+          # Get current version
           VERSION=$(grep "^version:" pubspec.yaml | awk '{print $2}')
           echo "Current version: $VERSION"
+          
+          # Always increment build number for distribution
           IFS='+' read -r VERSION_PART BUILD_PART <<< "$VERSION"
           IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION_PART"
+          
           if [ -z "$BUILD_PART" ]; then
             NEW_BUILD=1
           else
             NEW_BUILD=$((BUILD_PART + 1))
           fi
+          
           NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}+${NEW_BUILD}"
           echo "New version: $NEW_VERSION"
+          
+          # Update pubspec.yaml
           sed -i "s/^version: .*/version: $NEW_VERSION/" pubspec.yaml
-          cd android/app && sed -i "s/versionCode = flutter.versionCode/versionCode = $NEW_BUILD/" build.gradle.kts && cd ../..
+          
+          # Update build.gradle.kts - use direct version code
+          cat > android/app/build.gradle.kts << 'GRADLE_EOF'
+plugins {
+    id("com.android.application")
+    id("com.google.gms.google-services")
+    id("kotlin-android")
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
+android {
+    namespace = "com.hungdevmobile.flutter_core"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+
+    defaultConfig {
+        applicationId = "com.hungdevmobile.flutter_core"
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
+        versionCode = $NEW_BUILD
+        versionName = "$NEW_VERSION"
+        multiDexEnabled = true
+    }
+
+    signingConfigs {
+        if (file("release.jks").exists()) {
+            create("release") {
+                storeFile = file("release.jks")
+                storePassword = "password123"
+                keyAlias = "release"
+                keyPassword = "password123"
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            if (signingConfigs.findByName("release") != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+}
+
+flutter {
+    source = "../.."
+}
+GRADLE_EOF
+          echo "Build.gradle.kts updated with versionCode=$NEW_BUILD"
 
       - name: 💎 Setup Ruby and Fastlane
         uses: ruby/setup-ruby@v1
