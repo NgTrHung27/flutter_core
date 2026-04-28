@@ -15,12 +15,13 @@ platform :android do
     # App Android được build bằng shorebird release sẽ có Shorebird runtime
     # → có thể nhận các patch từ Shorebird servers
     # --artifact apk để tạo APK thay vì AAB (mặc định)
-    sh("cd ../.. && shorebird release android --artifact apk")
+    sh("cd ../.. && shorebird release android --artifact apk --force")
 
     # 4. Upload APK lên Firebase App Distribution
+    # Shorebird --artifact apk output ở build/app/outputs/apk/release/app-release.apk
     firebase_app_distribution(
       app: "1:664280682142:android:830fe892c914d908fc358f",
-      apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
+      apk_path: "../build/app/outputs/apk/release/app-release.apk",
       testers: "trunghungpq456@gmail.com",
       release_notes: "Bản build tự động từ CI/CD!",
       debug: true
