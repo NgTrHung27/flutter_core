@@ -1,36 +1,47 @@
 default_platform(:android)
 
 platform :android do
-  desc "Tự động Build APK và đẩy lên Firebase cho Tester"
+  desc "Build APK va dan len Firebase cho Tester"
   lane :distribute_to_qa do
 
-    # 1. Clean build folder trước
+    # 1. Clean build folder
     sh("cd ../.. && flutter clean")
 
-    # 2. Get version từ pubspec.yaml
-    version = sh("cd ../.. && grep '^version:' pubspec.yaml | awk '{print $2}'").strip
+    # 2. Shorebird: tao release hoac patch tren server
+    #
+    # Chu y: KHONG dung --artifact apk trong lenh nay vi no co the
+    # gay loi exit code 70 khi release da ton tai tren server.
+    #
+    # "yes |" tu dong xac nhan interactive prompt.
+    # Exit code 70 = release da ton tai -> dung patch thay the.
+    begin
+      sh("cd ../.. && yes | shorebird release android")
+    rescue => ex
+      # Neu release da ton tai tren Shorebird server thi dung patch
+      # shorebird patch se build diff va upload lenh Shorebird server
+      UI.message("Release da ton tai, su dung shorebird patch...")
+      sh("cd ../.. && yes | shorebird patch android --release-version latest")
+    end
 
-    # 3. Build và đăng ký release với Shorebird
-    # shorebird release tạo baseline APK + đăng ký version với Shorebird servers
-    # App Android được build bằng shorebird release sẽ có Shorebird runtime
-    # → có thể nhận các patch từ Shorebird servers
-    # --artifact apk để tạo APK thay vì AAB (mặc định)
-    sh("cd ../.. && shorebird release android --artifact apk --force")
+    # 3. Build APK rieng cho Firebase
+    # Dung flutter build apk thay vi shorebird --artifact apk.
+    # Day la artifact doc lap, khong phu thuoc vao Shorebird.
+    # APK output: build/app/outputs/flutter-apk/app-release.apk
+    sh("cd ../.. && flutter build apk --release")
 
-    # 4. Upload APK lên Firebase App Distribution
-    # Shorebird --artifact apk output ở build/app/outputs/apk/release/app-release.apk
+    # 4. Upload APK len Firebase App Distribution
     firebase_app_distribution(
       app: "1:664280682142:android:830fe892c914d908fc358f",
-      apk_path: "../build/app/outputs/apk/release/app-release.apk",
+      apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
       testers: "trunghungpq456@gmail.com",
-      release_notes: "Bản build tự động từ CI/CD!",
+      release_notes: "Ban build tu dong tu CI/CD!",
       debug: true
     )
   end
 
-  desc "Tạo Shorebird patch cho OTA update"
+  desc "Tao Shorebird patch cho OTA update"
   lane :shorebird_patch do
     sh("cd ../.. && flutter clean")
-    sh("cd ../.. && shorebird patch android")
+    sh("cd ../.. && yes | shorebird patch android")
   end
 end
