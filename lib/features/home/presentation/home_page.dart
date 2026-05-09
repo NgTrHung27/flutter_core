@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                'Welcome Hehe Test Shorebird ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}: ${DateTime.now().hour}h${DateTime.now().minute}m ${user.username ?? user.email}!',
+                'Welcome SHOREBIRD PATCH TEST v2 - ${DateTime.now().hour}:${DateTime.now().minute} - ${user.username ?? user.email}!',
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 10),
@@ -61,6 +61,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
+              //Test
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () =>
