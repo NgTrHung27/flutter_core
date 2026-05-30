@@ -1,15 +1,16 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import '../../api/api_helper.dart';
 import '../../api/api_interceptor.dart';
+import '../../blocs/network/network_bloc.dart';
 import '../../blocs/theme/theme_bloc.dart';
 import '../../blocs/translate/translate_bloc.dart';
 import '../../cache/hive_local_storage.dart';
 import '../../cache/secure_local_storage.dart';
 import '../../network/network_checker.dart';
+import '../../network/network_manager.dart';
 import '../../network/ssl_pinning_service.dart';
 import '../../../features/auth/di/auth_depedency.dart';
 import '../../../features/home/di/home_dependency.dart';
@@ -29,6 +30,14 @@ Future<void> configureDepedencies() async {
   HomeDependency.init();
   ProfilingDependency.init();
 
+  // Core network (khởi tạo trước tiên — Interceptor cần NetworkManager)
+  await NetworkManager.instance.initialize();
+  getIt.registerLazySingleton<NetworkManager>(() => NetworkManager.instance);
+  getIt.registerLazySingleton(() => NetworkInfo(getIt<NetworkManager>()));
+  getIt.registerLazySingleton(
+    () => NetworkBloc(getIt<NetworkManager>()),
+  );
+
   // Core dependencies
   getIt.registerLazySingleton(() => ThemeBloc());
   getIt.registerLazySingleton(() => TranslateBloc());
@@ -40,16 +49,6 @@ Future<void> configureDepedencies() async {
   final dio = buildDioWithSslPinning(sslPins);
   dio.interceptors.add(getIt<ApiInterceptor>());
 
-  getIt.registerLazySingleton<Dio>(() => dio);
-  getIt.registerLazySingleton(() => ApiHelper(getIt<Dio>()));
-  getIt.registerLazySingleton(
-    () => SecureLocalStorage(getIt<FlutterSecureStorage>()),
-  );
-  getIt.registerLazySingleton(() => HiveLocalStorage());
-  getIt.registerLazySingleton(
-    () => NetworkInfo(getIt<InternetConnectionChecker>()),
-  );
-  getIt.registerLazySingleton(() => InternetConnectionChecker.createInstance());
   getIt.registerLazySingleton<FlutterSecureStorage>(
     () => const FlutterSecureStorage(
       aOptions: AndroidOptions(),
@@ -58,6 +57,12 @@ Future<void> configureDepedencies() async {
       ),
     ),
   );
+  getIt.registerLazySingleton<Dio>(() => dio);
+  getIt.registerLazySingleton(() => ApiHelper(getIt<Dio>()));
+  getIt.registerLazySingleton(
+    () => SecureLocalStorage(getIt<FlutterSecureStorage>()),
+  );
+  getIt.registerLazySingleton(() => HiveLocalStorage());
 
   // Isolate Demo dependencies
   getIt.registerLazySingleton<IsolateRemoteDataSource>(
