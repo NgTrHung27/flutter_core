@@ -43,3 +43,14 @@ class UnprocessableContentException extends ApiException {
 class InvalidInputException extends ApiException {
   InvalidInputException(String message) : super(message, "Invalid Input: ");
 }
+
+class NetworkApiException extends ApiException {
+  NetworkApiException([String message = 'No internet connection'])
+      : super(message, 'Network Error: ');
+}
+
+class WeakNetworkApiException extends ApiException {
+  final int latencyMs;
+  WeakNetworkApiException(this.latencyMs)
+      : super('Latency ${latencyMs}ms – connection too slow', 'Weak Network: ');
+}
