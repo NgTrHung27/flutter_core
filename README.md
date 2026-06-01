@@ -13,8 +13,10 @@ A production-ready Flutter application demonstrating **Clean Architecture**, **B
 - [Testing](#testing)
 - [Performance Monitoring](#performance-monitoring)
 - [Error Handling](#error-handling)
+- [Network Monitoring](#network-monitoring)
 - [Dependency Injection](#dependency-injection)
 - [Thêm tính năng mới](#thêm-tính-năng-mới)
+- [Quản lý Version](#quản-lý-version)
 
 ---
 
@@ -492,6 +494,29 @@ String mapFailureToMessage(Failure failure) {
 
 ---
 
+## Network Monitoring
+
+Hệ thống quản lý và giám sát trạng thái kết nối mạng toàn cục với BLoC và các UI widgets hỗ trợ.
+
+### Cấu trúc
+- `NetworkChecker`: Kiểm tra kết nối Internet thực tế.
+- `NetworkManager`: Theo dõi thay đổi trạng thái mạng (Wifi, Mobile, v.v) sử dụng `connectivity_plus`.
+- `NetworkBloc`: BLoC lắng nghe sự thay đổi mạng và phân phát trạng thái (`NetworkConnected`, `NetworkDisconnected`) cho toàn bộ ứng dụng.
+- **UI Widgets**:
+  - `NetworkAwareWidget`: Wrapper widget tự động bắt trạng thái để hiển thị màn hình mất kết nối hoặc các thông báo mạng tương ứng.
+  - `WeakNetworkBanner`: Banner cảnh báo hiển thị khi tốc độ mạng yếu (ví dụ: 2G/EDGE).
+
+### Cách sử dụng
+Sử dụng `NetworkAwareWidget` để bọc các màn hình hoặc component cần phụ thuộc vào trạng thái mạng:
+
+```dart
+NetworkAwareWidget(
+  child: MyFeaturePage(), // Ứng dụng sẽ tự hiển thị giao diện mất mạng khi offline
+)
+```
+
+---
+
 ## Dependency Injection
 
 ### Global Setup (`lib/core/configs/injector/injector_conf.dart`)
@@ -742,6 +767,19 @@ GoRoute(
   ),
 ),
 ```
+
+---
+
+## Quản lý Version
+
+Version của ứng dụng được quản lý và cập nhật thông qua tệp `pubspec.yaml`:
+
+```yaml
+version: 1.0.0+4
+```
+
+- **`1.0.0`**: Phiên bản ứng dụng theo quy tắc [Semantic Versioning (SemVer)](https://semver.org/).
+- **`+4`**: Build number. Bạn cần tăng số này lên mỗi khi build bản cài đặt mới (APK/AAB/IPA) để phát hành lên các kho ứng dụng (App Store, Google Play), Firebase App Distribution hoặc để đẩy bản patch mới lên Shorebird.
 
 ---
 
