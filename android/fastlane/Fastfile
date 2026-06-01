@@ -9,18 +9,42 @@ platform :android do
 
     # 2. Shorebird: tao release hoac patch tren server
     #
-    # Chu y: KHONG dung --artifact apk trong lenh nay vi no co the
-    # gay loi exit code 70 khi release da ton tai tren server.
+    # Luu y ve Shorebird Code Push:
+    #   - "release"  : tao build moi hoan toan, bao gom assets.
+    #                  PHAI bump version khi co thay doi assets (PNG/SVG/fonts...).
+    #   - "patch"    : chi update Dart code (AOT diff), KHONG include asset changes.
+    #                  Neu co asset changes thi patch se fail voi UnpatchableChangeException.
     #
-    # "yes |" tu dong xac nhan interactive prompt.
-    # Exit code 70 = release da ton tai -> dung patch thay the.
+    # Flow:
+    #   - Thu release truoc.
+    #   - Neu fail vi VERSION DA TON TAI (exit 70) -> dung patch.
+    #   - Neu fail vi LY DO KHAC -> raise lai de CI bao loi.
+    release_output = ""
     begin
-      sh("cd ../.. && yes | shorebird release android")
+      release_output = sh("cd ../.. && yes | shorebird release android 2>&1")
     rescue => ex
-      # Neu release da ton tai tren Shorebird server thi dung patch
-      # shorebird patch se build diff va upload lenh Shorebird server
-      UI.message("Release da ton tai, su dung shorebird patch...")
-      sh("cd ../.. && yes | shorebird patch android --release-version latest")
+      error_msg = ex.message + release_output.to_s
+
+      if error_msg.include?("existing") || error_msg.include?("bump your version")
+        # Version da ton tai tren Shorebird -> thu patch
+        UI.message("Version da ton tai, thu shorebird patch...")
+        begin
+          sh("cd ../.. && yes | shorebird patch android --release-version latest")
+        rescue => patch_ex
+          patch_err = patch_ex.message.to_s
+          if patch_err.include?("asset changes") || patch_err.include?("UnpatchableChange")
+            UI.user_error!(
+              "PATCH FAILED: App co thay doi assets (images/svgs/fonts).\n" \
+              "Shorebird chi patch Dart code, khong patch assets.\n" \
+              "=> Hanh dong can thiet: Bump version trong pubspec.yaml roi chay lai."
+            )
+          else
+            raise patch_ex
+          end
+        end
+      else
+        raise ex
+      end
     end
 
     # 3. Build APK rieng cho Firebase
